@@ -4,8 +4,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import auth from '@react-native-firebase/auth';
 import {AuthContext} from './AuthProvide';
 import AppStack from './AppStack';
-import LoginAuthStack from './LoginAuthStack';
+import AuthStack from './AuthStack';
 import Splash from '../screens/Splash';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const MainContainer = () => {
   const {user, setUser} = useContext(AuthContext);
@@ -30,7 +31,7 @@ const MainContainer = () => {
   }
   return (
     <NavigationContainer>
-      {user ? <AppStack /> : <LoginAuthStack />}
+      {user ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 };

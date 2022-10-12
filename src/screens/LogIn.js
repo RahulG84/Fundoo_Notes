@@ -6,6 +6,7 @@ import {
   Alert,
   StyleSheet,
   TouchableOpacity,
+  Platform,
 } from 'react-native';
 import TextFrom from '../components/TextFrom';
 import Button from '../components/Button';
@@ -16,7 +17,7 @@ const LogIn = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const {login} = useContext(AuthContext);
+  const {login, googleLogin} = useContext(AuthContext);
 
   const onPressSignInButton = () => {
     let box = {};
@@ -35,10 +36,6 @@ const LogIn = ({navigation}) => {
   };
 
   const onPressSignInFacebook = () => {
-    Alert.alert(email);
-  };
-
-  const onPressSignInGoogle = () => {
     Alert.alert(email);
   };
 
@@ -77,11 +74,14 @@ const LogIn = ({navigation}) => {
       <Text style={styles.orText}>
         ------------------------- or -------------------------
       </Text>
-      <Button
-        onPress={onPressSignInGoogle}
-        typeOfButton="TERTIARY"
-        text="Sign In With Google"
-      />
+      {Platform.OS === 'android' ? (
+        <Button
+          onPress={() => googleLogin()}
+          typeOfButton="TERTIARY"
+          text="Sign In With Google"
+        />
+      ) : null}
+
       <View style={styles.condition}>
         <Text style={styles.conditionSignIn}>
           You Don't have an account? {}

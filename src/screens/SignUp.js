@@ -12,7 +12,7 @@ const SignUp = ({navigation}) => {
   const [confirmPassword, setconfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const {register} = useContext(AuthContext);
+  const {register, googleLogin} = useContext(AuthContext);
 
   const onPressSignUpButton = () => {
     let result = {};
@@ -129,7 +129,7 @@ const SignUp = ({navigation}) => {
         ------------------------- or -------------------------
       </Text>
       <Button
-        onPress={() => Alert.alert(firstName)}
+        onPress={() => googleLogin()}
         typeOfButton="TERTIARY"
         text="Sign In With Google"
       />
