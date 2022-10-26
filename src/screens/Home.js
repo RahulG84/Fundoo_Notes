@@ -5,12 +5,16 @@ import BottomBar from '../components/BottomBar';
 import UseDatabaseServices from '../services/UseDatabaseServices';
 import NotesList from '../components/NoteList';
 
-const Home = () => {
-  const {fetchingNote, notesList} = UseDatabaseServices();
+const Home = ({navigation}) => {
+  const {fetchingNote, archiveList, pinnedList, unpinnedList} =
+    UseDatabaseServices();
 
   useEffect(() => {
-    fetchingNote();
-  }, [fetchingNote]);
+    const unSubscribe = navigation.addListener('focus', () => {
+      fetchingNote();
+    });
+    return unSubscribe;
+  }, [navigation, fetchingNote]);
 
   return (
     <View style={styles.container}>
@@ -18,7 +22,12 @@ const Home = () => {
         <TopBar />
       </View>
       <View style={styles.NoteList}>
-        <NotesList notesList={notesList} />
+        <NotesList
+          navigation={navigation}
+          archiveList={archiveList}
+          pinnedList={pinnedList}
+          unpinnedList={unpinnedList}
+        />
       </View>
       <View style={styles.topAndBottom}>
         <BottomBar />

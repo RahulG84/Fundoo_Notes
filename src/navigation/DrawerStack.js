@@ -14,6 +14,11 @@ const Drawer = createDrawerNavigator();
 const DrawerStack = () => {
   return (
     <Drawer.Navigator
+      screenOptions={{
+        activeTintColor: '#fff' /* font color for active screen label */,
+        activeBackgroundColor: '#68f' /* bg color for active screen */,
+        inactiveTintColor: 'grey' /* Font color for inactive screens' labels */,
+      }}
       drawerContent={props => <DrawerContainer props={props} />}>
       <Drawer.Screen
         name="Home"

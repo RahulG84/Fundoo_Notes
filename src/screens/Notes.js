@@ -4,37 +4,60 @@ import {useRoute} from '@react-navigation/native';
 import NotesTopBar from '../components/NotesTopBar';
 import NotesBottomBar from '../components/NotesBottomBar';
 import NotesInput from '../components/NotesInput';
+import {useSelector} from 'react-redux';
 import UseDatabaseServices from '../services/UseDatabaseServices';
 
 const Notes = ({navigation}) => {
   const dataNotes = useRoute().params;
-  const {savingToFireStore} = UseDatabaseServices();
+  const {savingToFireStore, updateNote} = UseDatabaseServices();
 
   const [title, setTitle] = useState(dataNotes?.Title || '');
   const [note, setNote] = useState(dataNotes?.Note || '');
+  const [archive, setArchive] = useState(dataNotes?.Archive || false);
+  const [del, setDel] = useState(dataNotes?.Delete || false);
+  const [pin, setPin] = useState(dataNotes?.Pin || false);
+  const [id, setId] = useState(dataNotes?.key || '');
+  const {labelData} = useSelector(state => state.userReducer);
 
   const states = {
     title,
     note,
     setTitle,
     setNote,
+    archive,
+    setArchive,
+    del,
+    setDel,
+    pin,
+    setPin,
   };
 
   const onBackPress = async () => {
-    await savingToFireStore(title, note);
+    if (id) {
+      await updateNote(id, title, note, archive, del, pin, labelData);
+      console.log(id);
+    } else {
+      await savingToFireStore(title, note, archive, del, pin);
+    }
     navigation.goBack();
   };
-
+  const handleDeleteOption = async () => {
+    await updateNote(id, title, note, archive, pin);
+  };
   return (
     <View style={styles.mainView}>
-      <View style={{flex: 0.1}}>
-        <NotesTopBar onBackPress={onBackPress} />
+      <View style={styles.NoteTopAndBottom}>
+        <NotesTopBar onBackPress={onBackPress} states={states} />
       </View>
-      <View style={{flex: 0.8}}>
+      <View style={styles.MainNote}>
         <NotesInput {...states} />
       </View>
       <View style={styles.bottomView}>
-        <NotesBottomBar style={{flex: 0.1}} />
+        <NotesBottomBar
+          style={styles.NoteTopAndBottom}
+          handleDeleteOption={handleDeleteOption}
+          states={states}
+        />
       </View>
     </View>
   );
@@ -68,6 +91,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'absolute',
     bottom: -700,
+  },
+  NoteTopAndBottom: {
+    flex: 0.1,
+  },
+  MainNote: {
+    flex: 0.8,
   },
 });
 

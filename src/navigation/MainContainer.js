@@ -6,6 +6,8 @@ import {AuthContext} from './AuthProvide';
 import AppStack from './AppStack';
 import AuthStack from './AuthStack';
 import Splash from '../screens/Splash';
+import {Provider} from 'react-redux';
+import {Store} from '../../redux/Store';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const MainContainer = () => {
@@ -30,9 +32,11 @@ const MainContainer = () => {
     return <Splash />;
   }
   return (
-    <NavigationContainer>
-      {user ? <AppStack /> : <AuthStack />}
-    </NavigationContainer>
+    <Provider store={Store}>
+      <NavigationContainer>
+        {user ? <AppStack /> : <AuthStack />}
+      </NavigationContainer>
+    </Provider>
   );
 };
 

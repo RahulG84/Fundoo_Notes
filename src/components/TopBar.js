@@ -2,6 +2,9 @@ import React, {useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import ModalPopup from './ModalPopup';
+import {setGridView} from '../../redux/Action';
+import {useSelector, useDispatch} from 'react-redux';
+
 import {
   View,
   Text,
@@ -15,6 +18,8 @@ import {
 const TopBar = () => {
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
+  const {gridView} = useSelector(state => state.userReducer);
+  const dispatch = useDispatch();
 
   const changeVisible = bool => {
     setVisible(bool);
@@ -27,19 +32,31 @@ const TopBar = () => {
             <Ionicons name="menu" size={30} color={'black'} />
           </TouchableOpacity>
           <View>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Search');
+              }}>
               <Text style={styles.text}>Search your notes</Text>
             </TouchableOpacity>
           </View>
 
           <View style={{paddingLeft: 40}}>
-            <TouchableOpacity onPress={() => {}}>
-              <Ionicons
-                name="md-grid-outline"
-                size={28}
-                color={'black'}
-                style={{paddingLeft: 18}}
-              />
+            <TouchableOpacity onPress={() => dispatch(setGridView(!gridView))}>
+              {gridView ? (
+                <Ionicons
+                  name="list-sharp"
+                  size={28}
+                  color={'black'}
+                  style={{paddingLeft: 18}}
+                />
+              ) : (
+                <Ionicons
+                  name="md-grid-outline"
+                  size={28}
+                  color={'black'}
+                  style={{paddingLeft: 18}}
+                />
+              )}
             </TouchableOpacity>
           </View>
           <View>
@@ -51,7 +68,6 @@ const TopBar = () => {
                 style={styles.proStyle}
               />
             </TouchableOpacity>
-
             <Modal
               transparent={true}
               animationType="slide"
